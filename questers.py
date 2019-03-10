@@ -4,28 +4,30 @@ print('                         ************')
 print('                         * QUESTERS *')
 print('                         ************')
 print('')
-print('                 Version: 0.1.0')
+print('                 Version: 0.1.1')
 print('               Copyright: The Scriba Family 2019')
 
 config=open('questers.config','r')
 
 line=config.readline()
 
-screens={}
+scenes={}
 
 while line:
     linelist=line.strip('\n').split('|')
 
     if len(linelist)==4:
-        if linelist[0] not in screens:
-            screens[linelist[0]]={}
-        if linelist[1] not in screens[linelist[0]]:
-            screens[linelist[0]][linelist[1]]={}
-        screens[linelist[0]][linelist[1]][linelist[2]]=linelist[3]
+        if linelist[0] not in scenes:
+            scenes[linelist[0]]={}
+        if linelist[1] not in scenes[linelist[0]]:
+            scenes[linelist[0]][linelist[1]]={}
+        if linelist[2] not in scenes[linelist[0]][linelist[1]]:
+            scenes[linelist[0]][linelist[1]][linelist[2]]={}
+        scenes[linelist[0]][linelist[1]][linelist[2]][str(len(scenes[linelist[0]][linelist[1]][linelist[2]]))]=linelist[3]
     line=config.readline()
 
-current_screen='0'
-selection=current_screen
+current_scene='0'
+selection=current_scene
 
 while selection!='q':
     
@@ -35,20 +37,26 @@ while selection!='q':
     print(' *********************************************')
     if selection!='0':
         try:
-            current_screen=screens[current_screen][selection]['d']
+            current_scene=scenes[current_scene][selection]['d']['0']
         except:
             print('   Invalid choice. Please try again...')
             print('')
-    print('   ' + str(screens[current_screen]['0']['t']))
+    for i in scenes[current_scene]['0']['t']:
+        print('   ' + str(scenes[current_scene]['0']['t'][i]))
     print(' *********************************************')
     print('')
     print('What would you like to do?')
-    if len(screens[current_screen])>1:
-        for i in screens[current_screen]:
+    if len(scenes[current_scene])>1:
+        for i in scenes[current_scene]:
             if i!='0':
-                print (str(i)+': '+str(screens[current_screen][str(i)]['t']))
+                if 't' in scenes[current_scene][str(i)]:
+                    for j in scenes[current_scene][str(i)]['t']:
+                        if j=='0':
+                            print (str(i)+': '+str(scenes[current_scene][i]['t'][j]))
+                        else:
+                            print ('   '+str(scenes[current_scene][i]['t'][j]))
     print('q: Quit the game')
     print('')
 
-    selection=input('Choose your option:')
+    selection=input('Choose your option: ')
     
